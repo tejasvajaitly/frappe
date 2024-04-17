@@ -1,19 +1,26 @@
 import type { Metadata } from 'next'
-import './globals.css'
+import authOptions from '@/app/api/auth/[...nextauth]/authOptions'
+import '@/app/globals.css'
+import AuthSessionProvider from '@/components/AuthSessionProvider'
+import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
     title: 'frappé',
     description: 'ai generated spotify recommendations',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
-}: Readonly<{
+}: {
     children: React.ReactNode
-}>) {
+}) {
+    const session = await getServerSession(authOptions)
+
     return (
         <html lang="en">
-            <body>{children}</body>
+            <AuthSessionProvider session={session}>
+                <body>{children}</body>
+            </AuthSessionProvider>
         </html>
     )
 }
