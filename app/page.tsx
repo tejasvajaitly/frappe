@@ -1,27 +1,19 @@
 'use client'
 
-import { SearchResults, SpotifyApi } from '@spotify/web-api-ts-sdk'
+import { SearchResults } from '@spotify/web-api-ts-sdk'
 import sdk from '@/lib/spotify-sdk/ClientInstance'
-import { useSession, signOut, signIn } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { WebLogo } from './assets/webLogo'
 import { MobileLogo } from './assets/mobileLogo'
 import { RiseLoader } from 'react-spinners'
 import useDebounce from '@/app/hooks/useDebounce'
+import { Input } from '@/components/ui/input'
 
 export default function Home() {
     const session = useSession()
 
-    if (!session || session.status !== 'authenticated') {
-        return (
-            <div>
-                <h1>Spotify Web API Typescript SDK in Next.js</h1>
-                <button onClick={() => signIn('spotify')}>
-                    Sign in with Spotify
-                </button>
-            </div>
-        )
-    }
+    if (!session || session.status !== 'authenticated') return null
 
     return (
         <div className="bg-secondary h-full flex flex-col justify-start items-center gap-6 pt-36">
@@ -34,10 +26,6 @@ export default function Home() {
                     <MobileLogo />
                 </div>
             </div>
-
-            <p className="text-primary text-center text-3xl">
-                Search for a song, get recommendations with similar vibes.
-            </p>
 
             <SpotifySearch />
         </div>
@@ -78,20 +66,22 @@ function SpotifySearch() {
 
     return (
         <div className="w-max  lg:w-full max-w-xl flex flex-col gap-2">
-            <button onClick={() => signOut()}>signout</button>
-            <div className="relative">
-                <input
-                    className="rounded-md outline-none px-4 py-1 w-full"
-                    placeholder="Search for a song..."
-                    value={searchField}
-                    onChange={(e) => handleInput(e.target.value)}
-                />
+            <p className="text-primary text-center text-xl">
+                Choose a song, get recommendations with similar vibes.
+            </p>
 
+            <div className="relative h-10 w-full">
                 <RiseLoader
                     className="absolute right-2 top-1/2 transform -translate-y-1/2"
                     color="#B4B4B8"
                     size={5}
                     loading={loading}
+                />
+                <Input
+                    type="text"
+                    placeholder="Search for a song..."
+                    value={searchField}
+                    onChange={(e) => handleInput(e.target.value)}
                 />
             </div>
 

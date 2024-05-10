@@ -3,6 +3,12 @@ import authOptions from '@/app/api/auth/[...nextauth]/authOptions'
 import '@/app/globals.css'
 import AuthSessionProvider from '@/components/AuthSessionProvider'
 import { getServerSession } from 'next-auth'
+import { Inter } from 'next/font/google'
+import NavBar from './components/nav-bar'
+
+const inter = Inter({
+    subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
     title: 'frappé',
@@ -17,9 +23,12 @@ export default async function RootLayout({
     const session = await getServerSession(authOptions)
 
     return (
-        <html lang="en">
+        <html lang="en" className={inter.className}>
             <AuthSessionProvider session={session}>
-                <body>{children}</body>
+                <body>
+                    <NavBar />
+                    {children}
+                </body>
             </AuthSessionProvider>
         </html>
     )
