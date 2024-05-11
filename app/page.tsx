@@ -2,7 +2,7 @@
 
 import { SearchResults } from '@spotify/web-api-ts-sdk'
 import sdk from '@/lib/spotify-sdk/ClientInstance'
-import { useSession, signOut, signIn } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { WebLogo } from './assets/webLogo'
 import { MobileLogo } from './assets/mobileLogo'
@@ -11,7 +11,6 @@ import useDebounce from '@/app/hooks/useDebounce'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SpotifyMini } from './assets/spotifyMini'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const images = [
     'drake1.webp',
@@ -31,23 +30,6 @@ export default function Home() {
 
     return (
         <div>
-            <nav className="flex justify-end my-6">
-                <div className="flex flex-row gap-4">
-                    <Avatar>
-                        <AvatarImage
-                            className="object-cover"
-                            src={session.data.user?.image || ''}
-                            alt="@user"
-                        />
-                        <AvatarFallback>
-                            {session.data.user?.name?.split('')[0]}
-                        </AvatarFallback>
-                    </Avatar>
-                    <Button variant="ghost" onClick={() => signOut()}>
-                        logout
-                    </Button>
-                </div>
-            </nav>
             <div className="h-full flex flex-col justify-start items-center gap-6 pt-36">
                 <div className="">
                     <div className="hidden lg:block">
@@ -85,9 +67,7 @@ function SpotifySearch() {
     }, [debounceSearch])
 
     const searchGo = async () => {
-        console.log('hit search func', searchField)
         const tracks = await sdk.search(debounceSearch, ['track'], undefined, 6)
-        console.log('tracks', tracks)
         setResults(tracks)
         setLoading(false)
     }
@@ -181,7 +161,7 @@ function LandingPgae() {
                         key={index}
                         src={`/images/${image}`}
                         alt={`Image ${index + 1}`}
-                        className={` h-screen w-full object-cover dark:brightness-[0.2] dark:grayscale ${
+                        className={`h-screen w-full object-cover dark:brightness-[0.2] dark:grayscale ${
                             index === currentIndex ? 'block' : 'hidden'
                         }`}
                     />

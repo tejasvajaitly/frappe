@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import AuthSessionProvider from '@/components/AuthSessionProvider'
 import { getServerSession } from 'next-auth'
 import { Inter } from 'next/font/google'
+import NavBar from './components/navbar'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -24,7 +25,10 @@ export default async function RootLayout({
     return (
         <html lang="en" className={inter.className}>
             <AuthSessionProvider session={session}>
-                <body className="dark">{children}</body>
+                <body className="dark">
+                    <NavBar />
+                    {children}
+                </body>
             </AuthSessionProvider>
         </html>
     )
